@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../store/store";
+import { useSelector} from "react-redux";
 import { selectRailways } from "../../core/selectors/railway.selector";
 import { fetchRailways } from "../../core/usecases/fetch-railways.usecase";
 import { Map } from 'maplibre-gl';
+import { useAppDispatch } from "../../../store/store";
 
 export const useRailway = () => {
     const railways = useSelector(selectRailways);
     const mapContainer = useRef(null);
     const [map, setMap] = useState<Map | null>(null);
+    const dispatch = useAppDispatch()
 
     function onFetchData(){
         dispatch(fetchRailways)
@@ -38,7 +39,7 @@ export const useRailway = () => {
       }, []);
 
       useEffect(() => {
-        if(railways == null) return
+        if(railways?.data == null) return
         map.addSource('railways', {
             type:"geojson",
             data:railways
@@ -56,8 +57,6 @@ export const useRailway = () => {
             }
         });
       }, [railways])
-
-    const dispatch = useAppDispatch();
 
     return { railways, mapContainer,  map, onFetchData}
 }
