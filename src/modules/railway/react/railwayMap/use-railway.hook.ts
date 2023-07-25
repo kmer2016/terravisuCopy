@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector} from "react-redux";
 import { selectRailways } from "../../core/selectors/railway.selector";
 import { Map } from 'maplibre-gl';
@@ -11,7 +11,7 @@ import { fetchRailways } from "../../core/usecases/fetch-railways.usecase";
 export const useRailway = () => {
     const railways = useSelector(selectRailways);
     const mapContainer = useRef(null);
-    const [map, setMap] = useState<Map | null>(null);
+    const map = useRef(null);
     const dispatch = useAppDispatch()
 
 
@@ -30,47 +30,60 @@ export const useRailway = () => {
         const initialState = {
           lng: 2.209,
           lat: 46.23,
-          zoom: 5,
+          zoom: 4,
         };
         
-        setMap(new Map({
+        map.current = new Map({
           container: mapContainer.current,
           style: `${mapStyle}?apiKey=${myAPIKey}`,
           center: [initialState.lng, initialState.lat],
           zoom: initialState.zoom,
-        }))
+        })
     
     
-        return () => map?.remove();
+        return () => map?.current?.remove();
       }, []);
 
       useEffect(() => {
                 
         if(railways?.data == null) return
 
-        console.log("DATA ", railways?.data)
-        const existingSources = map.getStyle().sources;
-        for (const sourceName in existingSources) {
-          if (sourceName.startsWith('railways')) {
-            map.removeLayer(sourceName);
-            map.removeSource(sourceName);
-          }
-        }
-
-        map.addSource('railways', {
+        
+        map.current.addSource('railways', {
             type:"geojson",
             data:railways.data
         })
 
-        map.addLayer({
+        map.current.addLayer({
             'id': 'railways',
             'type': 'line',
+            'layout': {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
             'source': 'railways',
             'paint': {
                 'line-width': 5,
                 // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
                 // to set the line-color to a feature property value.
-                'line-color': "#008000"
+                'line-color': [
+                  'match',
+                  ["get", "mnemo"],
+                  'PROJET', 'blue',
+                  'EXPLOITE', 'green',
+                  'NEUT', 'gray',
+                  'NEUT DEF', 'yellow',
+                  'VS', 'red',
+                  'FERME ND', 'purple',
+                  'FERME MV', 'orange',
+                  'FERME D', 'brown',
+                  'FERME', 'pink',
+                  'FERME DT', 'cyan',
+                  'RETRANCHE', 'magenta',
+                  'DEC NV', 'lightblue',
+                  'DEC V', 'lightgreen',
+                  'black'
+                ]
             }
         });
       }, [map, railways.data])
