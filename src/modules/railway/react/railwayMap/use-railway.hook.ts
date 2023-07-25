@@ -1,19 +1,40 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector} from "react-redux";
 import { selectRailways } from "../../core/selectors/railway.selector";
 import { Map } from 'maplibre-gl';
 import { useAppDispatch } from "../../../store/store";
 import { fetchRailways } from "../../core/usecases/fetch-railways.usecase";
+import { RailwayDomainModel } from "../../core/model/railway.domain-model";
 
 
 
+export interface LegendItem {
+  label: RailwayDomainModel.RailwayStatus;
+  color: string;
+}
 
 export const useRailway = () => {
     const railways = useSelector(selectRailways);
     const mapContainer = useRef(null);
     const map = useRef(null);
+    const [showLegend, setShowLegend] = useState(false);
     const dispatch = useAppDispatch()
 
+    const legendItems:Array<LegendItem> = [
+      { label: 'PROJET', color: 'blue' },
+      { label: 'EXPLOITE', color: 'green' },
+      { label: 'NEUT', color: 'gray' },
+      { label: 'NEUT DEF', color: 'yellow' },
+      { label: 'VS', color: 'red' },
+      { label: 'FERME ND', color: 'purple' },
+      { label: 'FERME MV', color: 'orange' },
+      { label: 'FERME D', color: 'brown' },
+      { label: 'FERME', color: 'pink' },
+      { label: 'FERME DT', color: 'cyan' },
+      { label: 'RETRANCHE', color: 'magenta' },
+      { label: 'DEC NV', color: 'lightblue' },
+      { label: 'DEC V', color: 'lightgreen' }
+    ];
 
 
     function onFetchData(){
@@ -32,6 +53,8 @@ export const useRailway = () => {
           lat: 46.23,
           zoom: 5,
         };
+
+        
         
         map.current = new Map({
           container: mapContainer.current,
@@ -48,6 +71,7 @@ export const useRailway = () => {
                 
         if(railways?.data == null) return
 
+        setShowLegend(true)
         
         map.current.addSource('railways', {
             type:"geojson",
@@ -88,5 +112,5 @@ export const useRailway = () => {
         });
       }, [map, railways.data])
 
-    return { railways, mapContainer,  map, onFetchData}
+    return { railways, mapContainer,  map, showLegend, legendItems, onFetchData}
 }

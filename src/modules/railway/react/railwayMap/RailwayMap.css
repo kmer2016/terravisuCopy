@@ -1,15 +1,16 @@
 .map-container {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
-.btn-control {
+.btn {
   font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background-color: #3386c0;
   color: #fff;
   position: absolute;
   top: 20px;
-  left: 50%;
+  left: 25%;
   z-index: 1;
   border: none;
   width: 200px;
@@ -18,4 +19,37 @@
   cursor: pointer;
   padding: 10px 20px;
   border-radius: 3px;
+}
+
+.legend {
+  position: absolute;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  top:30%;
+  left: 10%;
+  width: 10rem!important;
+  max-height: 25rem;
+}
+
+.legend h3 {
+  margin-top: 0;
+}
+
+.legend ul {
+  list-style: none;
+  padding: 0;
+}
+
+.legend li {
+  margin-bottom: 10px;
+}
+
+.legend-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  vertical-align: middle;
 }
