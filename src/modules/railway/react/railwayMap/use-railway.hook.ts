@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector} from "react-redux";
 import { selectRailways } from "../../core/selectors/railway.selector";
-import { fetchRailways } from "../../core/usecases/fetch-railways.usecase";
 import { Map } from 'maplibre-gl';
 import { useAppDispatch } from "../../../store/store";
+import { fetchRailways } from "../../core/usecases/fetch-railways.usecase";
+
+
+
 
 export const useRailway = () => {
     const railways = useSelector(selectRailways);
@@ -11,11 +14,14 @@ export const useRailway = () => {
     const [map, setMap] = useState<Map | null>(null);
     const dispatch = useAppDispatch()
 
+
+
     function onFetchData(){
         dispatch(fetchRailways)
     }
 
     useEffect(() => {
+      
         // Get your Geoapify API key on https://www.geoapify.com/get-started-with-maps-api
         // The Geoapify service is free for small projects and the development phase.
         const myAPIKey = '2deb191468ab488fa54c41b0c73d0a2b';
@@ -39,10 +45,21 @@ export const useRailway = () => {
       }, []);
 
       useEffect(() => {
+                
         if(railways?.data == null) return
+
+        console.log("DATA ", railways?.data)
+        const existingSources = map.getStyle().sources;
+        for (const sourceName in existingSources) {
+          if (sourceName.startsWith('railways')) {
+            map.removeLayer(sourceName);
+            map.removeSource(sourceName);
+          }
+        }
+
         map.addSource('railways', {
             type:"geojson",
-            data:railways
+            data:railways.data
         })
 
         map.addLayer({
@@ -50,13 +67,13 @@ export const useRailway = () => {
             'type': 'line',
             'source': 'railways',
             'paint': {
-                'line-width': 3,
+                'line-width': 5,
                 // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
                 // to set the line-color to a feature property value.
-                'line-color': ['get', 'color']
+                'line-color': "#008000"
             }
         });
-      }, [railways])
+      }, [map, railways.data])
 
     return { railways, mapContainer,  map, onFetchData}
 }

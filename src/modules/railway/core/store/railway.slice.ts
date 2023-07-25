@@ -20,7 +20,7 @@ export const railwailSlice = createSlice({
         },
         handleRailwaysError: (state, action: PayloadAction<string>) => {
             return { ...state, status: "error", error: action.payload }
-        },
+        }
     }
 });
 

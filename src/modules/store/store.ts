@@ -16,11 +16,13 @@ export const createStore = (config:{
     initialState?:AppState;
     dependencies:Dependencies;
 }) => {
+
     const store = configureStore({
         // preloadedState:config?.initialState,
         reducer:reducers,
         devTools:true,
         middleware:(getDefaultMiddleware) => {
+            
             return getDefaultMiddleware({
                 thunk:{
                     extraArgument:config.dependencies
