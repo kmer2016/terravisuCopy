@@ -30,7 +30,7 @@ export const useRailway = () => {
         const initialState = {
           lng: 2.209,
           lat: 46.23,
-          zoom: 4,
+          zoom: 5,
         };
         
         map.current = new Map({
@@ -63,7 +63,7 @@ export const useRailway = () => {
             },
             'source': 'railways',
             'paint': {
-                'line-width': 5,
+                'line-width': 2,
                 // Use a get expression (https://maplibre.org/maplibre-style-spec/expressions/#get)
                 // to set the line-color to a feature property value.
                 'line-color': [
