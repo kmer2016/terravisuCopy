@@ -17,8 +17,9 @@ export const useRailway = () => {
     const railways = useSelector(selectRailways);
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [showLegend, setShowLegend] = useState(false);
+    const [showLegend, setShowLegend] = useState<boolean>(false);
     const dispatch = useAppDispatch()
+    const [hiddenLegendItems, setHiddenLegendItems] = useState<RailwayDomainModel.RailwayStatus[]>([]);
 
     const legendItems:Array<LegendItem> = [
       { label: 'PROJET', color: 'blue' },
@@ -39,6 +40,14 @@ export const useRailway = () => {
 
     function onFetchData(){
         dispatch(fetchRailways)
+    }
+
+    function handleLegendItemClick(label:RailwayDomainModel.RailwayStatus){
+      if (hiddenLegendItems.includes(label)) {
+        setHiddenLegendItems(hiddenLegendItems.filter(item => item !== label));
+      } else {
+        setHiddenLegendItems([...hiddenLegendItems, label]);
+      }
     }
 
     useEffect(() => {
@@ -72,7 +81,7 @@ export const useRailway = () => {
         if(railways?.data == null) return
 
         setShowLegend(true)
-        
+
         map.current.addSource('railways', {
             type:"geojson",
             data:railways.data
@@ -112,5 +121,5 @@ export const useRailway = () => {
         });
       }, [map, railways.data])
 
-    return { railways, mapContainer,  map, showLegend, legendItems, onFetchData}
+    return { railways, mapContainer,  map, showLegend, legendItems, hiddenLegendItems, handleLegendItemClick, onFetchData}
 }

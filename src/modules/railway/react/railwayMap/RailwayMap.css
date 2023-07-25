@@ -46,10 +46,18 @@
   margin-bottom: 10px;
 }
 
+.legend li:hover {
+  cursor: pointer;
+}
 .legend-icon {
   display: inline-block;
   width: 12px;
   height: 12px;
   margin-right: 5px;
   vertical-align: middle;
+}
+
+.hidden-item {
+  text-decoration: line-through;
+  color: #ccc;
 }
