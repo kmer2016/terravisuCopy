@@ -76,6 +76,8 @@ export const useRailway = () => {
         return () => map?.current?.remove();
       }, []);
 
+
+      
       useEffect(() => {
                 
         if(railways?.data == null) return
@@ -120,6 +122,15 @@ export const useRailway = () => {
             }
         });
       }, [map, railways.data])
+
+      useEffect(() => {
+        if(railways?.data == null) return
+        const filteredData = {
+          ...railways.data,
+          features: railways.data.features.filter(feature => !hiddenLegendItems.includes(feature.properties.mnemo))
+        };
+        map.current.getSource('railways').setData(filteredData);
+      }, [hiddenLegendItems, railways.data])
 
     return { railways, mapContainer,  map, showLegend, legendItems, hiddenLegendItems, handleLegendItemClick, onFetchData}
 }
