@@ -12,6 +12,6 @@ export const fetchRailways = async (
             const railways = await dependencies.railwayGateway.getRailways();
             dispatch(railwailSlice.actions.storeRailways(railways));
         } catch (error) {
-            console.log("ERROR")
+            dispatch(railwailSlice.actions.handleRailwaysError(error.message));
         }
 }
