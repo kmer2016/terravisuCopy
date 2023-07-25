@@ -7,6 +7,7 @@ export const fetchRailways = async (
     _:AppGetState,
     dependencies:Dependencies
     ) => {
+        dispatch(railwailSlice.actions.handleRailwaysLoading());
         try {
             const railways = await dependencies.railwayGateway.getRailways();
             dispatch(railwailSlice.actions.storeRailways(railways));

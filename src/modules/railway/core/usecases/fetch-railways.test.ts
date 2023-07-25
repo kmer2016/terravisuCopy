@@ -16,8 +16,11 @@ describe("Fetch railways", () => {
 
         const promise = store.dispatch(fetchRailways);
 
+        expect(store.getState().railways.status).toEqual("loading");
+
         await promise;
 
-        expect(store.getState().railways).toEqual(railways)
+        expect(store.getState().railways.data).toEqual(railways)
+        expect(store.getState().railways.status).toEqual("success");
     })
 })

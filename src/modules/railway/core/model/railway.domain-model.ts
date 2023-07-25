@@ -27,4 +27,10 @@ export namespace RailwayDomainModel {
         features:Array<RailwaysFeature>
 
     }
+
+    export type State = {
+        data:RailwaysGeometryCollection,
+        status:"idle" | "loading" | "success" | "error",
+        error:string
+    }
 } 

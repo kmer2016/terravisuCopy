@@ -5,5 +5,5 @@ export const selectRailways = (state:AppState) => state.railways
 
 export const selectRailwaysByStatus = (state:AppState, status:RailwayDomainModel.RailwayStatus) => {
     if(state.railways == null) return null;
-    return state.railways.features.filter(feature => feature.properties.mnemo === status)
+    return state.railways.data.features.filter(feature => feature.properties.mnemo === status)
 }
