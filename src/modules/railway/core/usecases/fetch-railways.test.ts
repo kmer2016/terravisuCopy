@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest"
 import { createTestStore } from "../../../testing/tests-environment";
 import { StubRailwayGateway } from "../../testing/stub.railway-gateway";
 import { RailwayFactory } from "../model/railway.factory"
+import { fetchRailways } from "./fetch-railways.usecase";
 
-describe("Fetch railway", () => {
+describe("Fetch railways", () => {
     it("should fetch the railways", async () => {
         const railways = RailwayFactory.create();
 
