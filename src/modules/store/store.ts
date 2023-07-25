@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import { useDispatch } from "react-redux";
 import { railwayReducer } from "../railway/core/store/railway.slice";
 import { Dependencies } from "./dependencies";
 
@@ -30,3 +31,5 @@ export const createStore = (config:{
 
     return store;
 }
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
